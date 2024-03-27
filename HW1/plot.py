@@ -25,7 +25,7 @@ if __name__ == '__main__':
         plt.legend()
         plt.xlabel('danceability')
         plt.ylabel('song popularity')
-        plt.savefig(os.path.join('plot2','fitting_curve_{}_without_regularization.png'.format(m)))
+        plt.savefig(os.path.join('plot','fitting_curve_{}_without_regularization.png'.format(m)))
         
         plt.cla()
         df = pd.read_csv('fitting_curve_{}.csv'.format(m))
@@ -38,7 +38,7 @@ if __name__ == '__main__':
         plt.xlabel('danceability')
         plt.ylabel('song popularity')
         plt.legend()
-        plt.savefig(os.path.join('plot2','fitting_curve_{}_with_regularization.png'.format(m)))
+        plt.savefig(os.path.join('plot','fitting_curve_{}_with_regularization.png'.format(m)))
         
         
     # plot validation error
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     plt.legend()
     plt.xlabel('M')
     plt.ylabel('MSE Error')
-    plt.savefig(os.path.join('plot2','validation_error.png'))
+    plt.savefig(os.path.join('plot','validation_error.png'))
     
     # plot error and accuracy
     df = pd.read_csv('result.csv')
@@ -80,7 +80,7 @@ if __name__ == '__main__':
     axs[1].set_ylabel('Accuracy')
     plt.tight_layout()
     
-    plt.savefig(os.path.join('plot2','error and accuracy without regularization.png'))
+    plt.savefig(os.path.join('plot','error and accuracy without regularization.png'))
     
     fig, axs = plt.subplots(1,2,figsize=(10,5))
 
@@ -99,51 +99,51 @@ if __name__ == '__main__':
     axs[1].legend()
 
     plt.tight_layout()
-    plt.savefig(os.path.join('plot2','error and accuracy with regularization.png'))
+    plt.savefig(os.path.join('plot','error and accuracy with regularization.png'))
     
     # plot demo
     
-    # for m in M:
-    #     plt.cla()
-    #     plt.clf()
-    #     plt.figure(figsize=(5,5))
-    #     df = pd.read_csv('demo_predictions_{}.csv'.format(m))
-    #     x = np.array(df['danceability'])
-    #     y = np.array(df['Predictions'])
-    #     t = np.array(df['Test_target'])
-    #     plt.scatter(x,t, label='test data', color='blue')
-    #     plt.scatter(x,y, label='prediction', color='red')
-    #     plt.title('Demo Fitting Curve for M = {} without regularlization'.format(m))
-    #     plt.legend()
-    #     plt.xlabel('danceability')
-    #     plt.ylabel('song popularity')
-    #     plt.savefig(os.path.join('plot2','demo_fitting_curve_{}_without_regularization.png'.format(m)))
+    for m in M:
+        plt.cla()
+        plt.clf()
+        plt.figure(figsize=(5,5))
+        df = pd.read_csv('demo_predictions_{}.csv'.format(m))
+        x = np.array(df['danceability'])
+        y = np.array(df['Predictions'])
+        t = np.array(df['Test_target'])
+        plt.scatter(x,t, label='test data', color='blue')
+        plt.scatter(x,y, label='prediction', color='red')
+        plt.title('Demo Fitting Curve for M = {} without regularlization'.format(m))
+        plt.legend()
+        plt.xlabel('danceability')
+        plt.ylabel('song popularity')
+        plt.savefig(os.path.join('plot','demo_fitting_curve_{}_without_regularization.png'.format(m)))
         
-    #     plt.cla()
-    #     df = pd.read_csv('fitting_curve_{}.csv'.format(m))
-    #     x = np.array(df['danceability'])
-    #     y = np.array(df['Predictions Regularization'])
-    #     t = np.array(df['Test_target'])
-    #     plt.scatter(x,t, label='test data', color='blue')
-    #     plt.scatter(x,y, label='prediction', color='red')
-    #     plt.title('Demo Fitting Curve for M = {} with regularlization'.format(m))
-    #     plt.xlabel('danceability')
-    #     plt.ylabel('song popularity')
-    #     plt.legend()
-    #     plt.savefig(os.path.join('plot2','demo_fitting_curve_{}_with_regularization.png'.format(m)))
+        plt.cla()
+        df = pd.read_csv('fitting_curve_{}.csv'.format(m))
+        x = np.array(df['danceability'])
+        y = np.array(df['Predictions Regularization'])
+        t = np.array(df['Test_target'])
+        plt.scatter(x,t, label='test data', color='blue')
+        plt.scatter(x,y, label='prediction', color='red')
+        plt.title('Demo Fitting Curve for M = {} with regularlization'.format(m))
+        plt.xlabel('danceability')
+        plt.ylabel('song popularity')
+        plt.legend()
+        plt.savefig(os.path.join('plot','demo_fitting_curve_{}_with_regularization.png'.format(m)))
         
-    # df = pd.read_csv('demo_result.csv')
-    # x = np.array(df['M'])
-    # y = np.array(df['Demo Accuracy'])
-    # y_r = np.array(df[' Demo Accuracy Regularization'])
-    # plt.cla()
-    # plt.plot(x,y, label='demo accuracy')
-    # plt.plot(x,y_r, label='demo accuracy regularization')
-    # plt.title('Demo Accuracy')
-    # plt.xlabel('M')
-    # plt.ylabel('Accuracy')
-    # plt.legend()
-    # plt.savefig(os.path.join('plot2','demo_accuracy.png'))
+    df = pd.read_csv('demo_result.csv')
+    x = np.array(df['M'])
+    y = np.array(df['Demo Accuracy'])
+    y_r = np.array(df[' Demo Accuracy Regularization'])
+    plt.cla()
+    plt.plot(x,y, label='demo accuracy')
+    plt.plot(x,y_r, label='demo accuracy regularization')
+    plt.title('Demo Accuracy')
+    plt.xlabel('M')
+    plt.ylabel('Accuracy')
+    plt.legend()
+    plt.savefig(os.path.join('plot','demo_accuracy.png'))
     
     
     

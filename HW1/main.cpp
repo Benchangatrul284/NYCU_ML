@@ -46,8 +46,8 @@ int main(){
     std::string line;
     
     // ***************demo***************//
-    // ifstream demo_file;
-    // demo_file.open("HW1.csv");
+    ifstream demo_file;
+    demo_file.open("HW1_demo.csv");
     //******************************//
 
     // Read and discard the header line
@@ -75,27 +75,27 @@ int main(){
 
     //*************demo******************//
     // Read and discard the header line
-    // std::getline(demo_file, line);
-    // int demo_count = countRowsInCSV("HW1.csv");
-    // Eigen::MatrixXd demo_features(demo_count, 11);
-    // Eigen::MatrixXd demo_targets(demo_count, 1);
+    std::getline(demo_file, line);
+    int demo_count = countRowsInCSV("HW1.csv");
+    Eigen::MatrixXd demo_features(demo_count, 11);
+    Eigen::MatrixXd demo_targets(demo_count, 1);
 
-    // row = 0;
-    // while(std::getline(demo_file, line)){
-    //     std::stringstream ss(line);
-    //     std::string data;
-    //     int col = 0;
-    //     while(std::getline(ss, data, ',')){
-    //         if (col == 0) { // assuming the first column is the target
-    //             demo_targets(row, 0) = std::stod(data);
-    //         } else { // the rest are features
-    //             demo_features(row, col-1) = std::stod(data);
-    //         }
-    //         col++;
-    //     }
-    //     row++;
-    // }
-    // demo_file.close();
+    row = 0;
+    while(std::getline(demo_file, line)){
+        std::stringstream ss(line);
+        std::string data;
+        int col = 0;
+        while(std::getline(ss, data, ',')){
+            if (col == 0) { // assuming the first column is the target
+                demo_targets(row, 0) = std::stod(data);
+            } else { // the rest are features
+                demo_features(row, col-1) = std::stod(data);
+            }
+            col++;
+        }
+        row++;
+    }
+    demo_file.close();
     //*******************************//
 
     // Assuming features and targets are Eigen::MatrixXd
@@ -143,11 +143,11 @@ int main(){
 
 
     //***************demo***************//
-    // for (int i = 0; i < demo_count; i++) {
-    //     for (int j = 0; j < 11; j++) {
-    //         demo_features(i, j) = (demo_features(i, j) - mean(j)) / std(j);
-    //     }
-    // }
+    for (int i = 0; i < demo_count; i++) {
+        for (int j = 0; j < 11; j++) {
+            demo_features(i, j) = (demo_features(i, j) - mean(j)) / std(j);
+        }
+    }
     //***********************************//
 
     double lambda_ = 0.1;
@@ -183,16 +183,17 @@ int main(){
             test_error_regularization = (test_predictions_regularization - test_targets).array().square().sum() / 5817.;
             
             //************demo**********//
-            // Eigen::MatrixXd demo_phi = design_matrix(demo_features, M);
-            // Eigen::MatrixXd demo_predictions = demo_phi * w;
-            // Eigen::MatrixXd demo_predictions_regularization = demo_phi * w2;
-            // ofstream outfile4("demo_predictions_" + std::to_string(M) + ".csv");
-            // outfile4 << "danceability,Predictions,Predictions Regularization,Test_target\n";
-            // for (int i = 0; i < demo_count; i++) {
-            //     outfile4 << demo_features(i, 2) << "," << demo_predictions(i, 0) << "," << demo_predictions_regularization(i, 0) << "," << demo_targets(i, 0) << "\n";
-            //     outfile4.flush();
-            // }
-            // outfile4.close();
+            // plot the fitting curve of the third feature of the demo set
+            Eigen::MatrixXd demo_phi = design_matrix(demo_features, M);
+            Eigen::MatrixXd demo_predictions = demo_phi * w;
+            Eigen::MatrixXd demo_predictions_regularization = demo_phi * w2;
+            ofstream outfile4("demo_predictions_" + std::to_string(M) + ".csv");
+            outfile4 << "danceability,Predictions,Predictions Regularization,Test_target\n";
+            for (int i = 0; i < demo_count; i++) {
+                outfile4 << demo_features(i, 2) << "," << demo_predictions(i, 0) << "," << demo_predictions_regularization(i, 0) << "," << demo_targets(i, 0) << "\n";
+                outfile4.flush();
+            }
+            outfile4.close();
             //**************************//
 
             
@@ -213,12 +214,12 @@ int main(){
 
             // ************demo************//
             // create a target_temp to calculate the accuracy
-            // Eigen::MatrixXd demo_targets_temp = demo_targets;
-            // for (int i = 0; i < demo_count; i++) {
-            //     if (demo_targets_temp(i, 0) == 0) {
-            //         demo_targets_temp(i, 0) = 1;
-            //     }
-            // }
+            Eigen::MatrixXd demo_targets_temp = demo_targets;
+            for (int i = 0; i < demo_count; i++) {
+                if (demo_targets_temp(i, 0) == 0) {
+                    demo_targets_temp(i, 0) = 1;
+                }
+            }
             //*****************************//
 
             
@@ -251,18 +252,18 @@ int main(){
             cout << M << "," << train_error << "," << train_accuracy << "," << test_error << "," << test_accuracy << "," << train_error_regularization << "," << train_accuracy_regularization << "," << test_error_regularization << "," << test_accuracy_regularization << "\n";
             
             // ***********demo*****************//
-            
-            // Eigen::MatrixXd demo_diff = Eigen::MatrixXd::Zero(demo_count, 1);
-            // Eigen::MatrixXd demo_diff_regularization = Eigen::MatrixXd::Zero(demo_count, 1);
-            // for (int i = 0; i < demo_count; i++) {
-            //     demo_diff(i, 0) = abs((demo_predictions(i, 0) - demo_targets_temp(i, 0)) / demo_targets_temp(i, 0));
-            //     demo_diff_regularization(i, 0) = abs((demo_predictions_regularization(i, 0) - demo_targets_temp(i, 0)) / demo_targets_temp(i, 0));
-            // }
-            // double demo_accuracy = 1 - demo_diff.sum() / demo_count;
-            // double demo_accuracy_regularization = 1 - demo_diff_regularization.sum() / demo_count;
-            // cout << "Demo Accuracy: " << demo_accuracy << ", Demo Accuracy Regularization: " << demo_accuracy_regularization << endl;
-            // outfile5 << M << "," << demo_accuracy << "," << demo_accuracy_regularization << "\n";
-            // outfile5.flush();
+            // calculate the accuracy of the demo set
+            Eigen::MatrixXd demo_diff = Eigen::MatrixXd::Zero(demo_count, 1);
+            Eigen::MatrixXd demo_diff_regularization = Eigen::MatrixXd::Zero(demo_count, 1);
+            for (int i = 0; i < demo_count; i++) {
+                demo_diff(i, 0) = abs((demo_predictions(i, 0) - demo_targets_temp(i, 0)) / demo_targets_temp(i, 0));
+                demo_diff_regularization(i, 0) = abs((demo_predictions_regularization(i, 0) - demo_targets_temp(i, 0)) / demo_targets_temp(i, 0));
+            }
+            double demo_accuracy = 1 - demo_diff.sum() / demo_count;
+            double demo_accuracy_regularization = 1 - demo_diff_regularization.sum() / demo_count;
+            cout << "Demo Accuracy: " << demo_accuracy << ", Demo Accuracy Regularization: " << demo_accuracy_regularization << endl;
+            outfile5 << M << "," << demo_accuracy << "," << demo_accuracy_regularization << "\n";
+            outfile5.flush();
             //*********************************//
             
             
@@ -282,6 +283,7 @@ int main(){
             }
             outfile2.close();
 
+            // solution 2
             // Eigen::MatrixXd curve_features = Eigen::MatrixXd::Zero(10000, 11);
             // double min = 0;
             // double max = 1;
